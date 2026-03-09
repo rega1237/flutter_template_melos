@@ -1,0 +1,41 @@
+name: flutter_template_melos
+publish_to: none
+
+environment:
+  sdk: "^3.10.4"
+
+# Dart Pub Workspaces — list all package paths explicitly.
+# Starting Dart 3.11+ globs are supported; for now, list each one.
+workspace:
+  - apps/flutter_app
+
+dev_dependencies:
+  melos: ^7.4.0
+
+melos:
+  scripts:
+    # Run build_runner in all packages that use code generation
+    build:runner:
+      description: Generate code (freezed, json_serializable, etc.)
+      exec: dart run build_runner build --delete-conflicting-outputs
+      packageFilters:
+        dependsOn: build_runner
+
+    # Run flutter analyze across all packages
+    analyze:
+      description: Run static analysis on all packages
+      exec: flutter analyze --no-fatal-infos
+      packageFilters:
+        flutter: true
+
+    # Run all tests
+    test:
+      description: Run tests in all packages
+      exec: flutter test
+      packageFilters:
+        flutter: true
+
+    # Clean all packages
+    clean:
+      description: Clean build artifacts in all packages
+      exec: flutter clean
